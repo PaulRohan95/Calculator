@@ -1,0 +1,33 @@
+h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.inputText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.result {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(176, 176, 176);
+}
+
+.inputWrapper {
+    display: grid;
+    justify-content: center;
+    margin-top: -15px;
+}
+
+button {
+    height: 60px;
+    width: 60px;
+    margin: 7px;
+    border: 1px solid black;
+    border-radius: 15px;
+}
