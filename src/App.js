@@ -51,7 +51,11 @@ function App() {
   }
 
   const handleOperatorClick = (op) => {
-    setInput(input + op);
+    if (input === '' && result !== '') {
+      setInput(result + ' ' + op + ' ');
+    } else {
+      setInput(input + ' ' + op + ' ');
+    }
     setIsNewOperation(false);
   }
 
