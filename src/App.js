@@ -46,8 +46,12 @@ function App() {
   const [isNewOperation, setIsNewOperation] = useState(true);
 
   const handleNumberClick = (value) => {
-    setInput(input + value);
-    setIsNewOperation(false);
+    if (isNewOperation && !input.includes(' ')) {
+      setInput(value);
+      setIsNewOperation(false);
+    } else {
+      setInput(input + value);
+    }
   }
 
   const handleOperatorClick = (op) => {
