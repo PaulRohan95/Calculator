@@ -64,13 +64,19 @@ function App() {
 
   const handleEquals = () => {
     if (input !== '') {
+      const operators = ['+', '-', '*', '/'];
       let expression = calculationHistory + input;
       if (result !== '') {
         expression = result + ' ' + input;
       }
-      const currentResult = evaluateExpression(expression);
-      setCalculationHistory(expression + ' = ' + currentResult + ' ');
-      setResult(currentResult);
+      const tokens = expression.trim().split(' ');
+      if (operators.includes(tokens[tokens.length -1])){
+        setResult("Error");
+      } else {
+        const currentResult = evaluateExpression(expression);
+        setCalculationHistory(expression + ' = ' + currentResult + ' ');
+        setResult(currentResult);
+      }
       setIsNewOperation(true);
     }
   }
