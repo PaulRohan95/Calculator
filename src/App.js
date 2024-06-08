@@ -63,15 +63,17 @@ function App() {
   }
 
   const handleEquals = () => {
-    if (input !== '') {
+    if (input.trim() === '') {
+      setResult('Error');
+    } else {
       const operators = ['+', '-', '*', '/'];
       let expression = calculationHistory + input;
       if (result !== '') {
         expression = result + ' ' + input;
       }
       const tokens = expression.trim().split(' ');
-      if (operators.includes(tokens[tokens.length -1])){
-        setResult("Error");
+      if (operators.includes(tokens[tokens.length - 1])) {
+        setResult('Error');
       } else {
         const currentResult = evaluateExpression(expression);
         setCalculationHistory(expression + ' = ' + currentResult + ' ');
@@ -79,7 +81,7 @@ function App() {
       }
       setIsNewOperation(true);
     }
-  }
+  };
   
 
   return (
