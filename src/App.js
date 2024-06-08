@@ -1,23 +1,40 @@
 import React, { useState } from 'react';
 import styles from './App.module.css';
 
+// Function to evaluate the expression
 function evaluateExpression(expression) {
   const operators = ['+', '-', '*', '/'];
-  let tokens = expression.split(' ');
-  
+  let exp = [];
+  let numChar = [];
 
-  for (let i = 0; i < tokens.length - 1; i++) {
-    if (operators.includes(tokens[i]) && operators.includes(tokens[i + 1])) {
-      tokens[i] += tokens[i + 1];
-      tokens.splice(i + 1, 1);
+  // Iterate over each character in the expression
+  for (let char of expression) {
+    // If the character is an operator, push the accumulated number and the operator to tokens
+    if (operators.includes(char)) {
+      if (numChar.length > 0) {
+        exp.push(numChar.join(''));
+        numChar = [];
+      }
+      exp.push(char);
+    } else {
+      // If the character is part of a number, add it to the numberBuffer
+      numChar.push(char);
     }
   }
+  
+  // Push the last accumulated number to tokens
+  if (numChar.length > 0) {
+    exp.push(numChar.join(''));
+  }
 
-  let result = parseFloat(tokens[0]);
-  for (let i = 1; i < tokens.length; i += 2) {
-    const operator = tokens[i];
-    const operand = parseFloat(tokens[i + 1]);
+  // Initialize result with the first number
+  let result = parseFloat(exp[0]);
+  // Iterate over the tokens and apply operations
+  for (let i = 1; i < exp.length; i += 2) {
+    const operator = exp[i];
+    const operand = parseFloat(exp[i + 1]);
 
+    // Perform the operation based on the operator
     switch (operator) {
       case '+':
         result += operand;
@@ -40,57 +57,69 @@ function evaluateExpression(expression) {
 }
 
 function App() {
-  const [input, setInput] = useState('');
-  const [calculationHistory, setCalculationHistory] = useState('');
-  const [result, setResult] = useState('');
-  const [isNewOperation, setIsNewOperation] = useState(true);
+  const [input, setInput] = useState(''); // State to keep track of the current input
+  const [calculationHistory, setCalculationHistory] = useState(''); // State to keep track of the calculation history
+  const [result, setResult] = useState(''); // State to keep track of the result
+  const [isNewOperation, setIsNewOperation] = useState(true); // State to track if a new operation has started
 
+  // Handle number button click
   const handleNumberClick = (value) => {
-    if (isNewOperation && !input.includes(' ')) {
+    // If a new operation has started, reset the input
+    if (isNewOperation) {
       setInput(value);
       setIsNewOperation(false);
     } else {
+      // Otherwise, append the number to the existing input
       setInput(input + value);
     }
   }
 
+  // Handle operator button click
   const handleOperatorClick = (op) => {
-    if (input === '' && result !== '') {
-      setInput(result + ' ' + op + ' ');
+    // If a new operation and there is a result, start new input with the result and operator
+    if (isNewOperation && result !== '') {
+      setInput(result + op);
     } else {
-      setInput(input + ' ' + op + ' ');
+      // Otherwise, append the operator to the existing input
+      setInput(input + op);
     }
     setIsNewOperation(false);
   }
 
+  // Handle clear button click
   const handleClear = () => {
+    // Reset all states to their initial values
     setInput('');
     setResult('');
     setCalculationHistory('');
     setIsNewOperation(true);
   }
 
+  // Handle equals button click
   const handleEquals = () => {
+    // Check if the input is empty
     if (input.trim() === '') {
       setResult('Error');
     } else {
       const operators = ['+', '-', '*', '/'];
       let expression = calculationHistory + input;
       if (result !== '') {
-        expression = result + ' ' + input;
+        expression = result + input;
       }
-      const tokens = expression.trim().split(' ');
-      if (operators.includes(tokens[tokens.length - 1])) {
+      const lastChar = expression[expression.length - 1];
+      // Check if the last character is an operator
+      if (operators.includes(lastChar)) {
         setResult('Error');
       } else {
+        // Evaluate the expression and update the history and result
         const currentResult = evaluateExpression(expression);
-        setCalculationHistory(expression + ' = ' + currentResult + ' ');
+        setCalculationHistory(expression + '=' + currentResult);
         setResult(currentResult);
+        setInput(currentResult.toString());
       }
       setIsNewOperation(true);
     }
   };
-  
 
   return (
     <div>
