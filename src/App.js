@@ -9,7 +9,7 @@ function evaluateExpression(expression) {
 
   // Iterate over each character in the expression
   for (let char of expression) {
-    // If the character is an operator, push the accumulated number and the operator to tokens
+    // If the character is an operator, push the accumulated number and the operator to exp
     if (operators.includes(char)) {
       if (numChar.length > 0) {
         exp.push(numChar.join(''));
@@ -17,19 +17,19 @@ function evaluateExpression(expression) {
       }
       exp.push(char);
     } else {
-      // If the character is part of a number, add it to the numberBuffer
+      // If the character is part of a number, add it to the numChar
       numChar.push(char);
     }
   }
   
-  // Push the last accumulated number to tokens
+  // Push the last accumulated number to exp
   if (numChar.length > 0) {
     exp.push(numChar.join(''));
   }
 
   // Initialize result with the first number
   let result = parseFloat(exp[0]);
-  // Iterate over the tokens and apply operations
+  // Iterate over the exp and apply operations
   for (let i = 1; i < exp.length; i += 2) {
     const operator = exp[i];
     const operand = parseFloat(exp[i + 1]);
